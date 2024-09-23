@@ -1,0 +1,17 @@
+This project is the working example for the TangNano 20K FPGA.
+
+Brief instructions for windows 11 installation:
+
+1) Install Gowin IDE
+2) Install Gowin Programmer Driver
+3) Synthesize,Place & Route,Program board
+
+A copy of the FPGA schematics will be included:
+Pin 88 is Key Switch 1
+Pin 15 is LED 0
+
+When Key Switch 1 is pressed LED 0 is turned on (Active low)
+
+There are two ways to program this FPGA:
+1) SRAM (I don't prefer this since it requires power)
+2) EEPROM (Retained even after power loss; Preferred)
