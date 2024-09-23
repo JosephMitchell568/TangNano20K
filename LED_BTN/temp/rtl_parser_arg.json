@@ -1,0 +1,17 @@
+{
+ "Device" : "GW2AR-18C",
+ "Files" : [
+  {
+   "Path" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/led_btn/src/led_btn.v",
+   "Type" : "verilog"
+  }
+ ],
+ "IncludePath" : [
+
+ ],
+ "LoopLimit" : 2000,
+ "ResultFile" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/led_btn/impl/temp/rtl_parser.result",
+ "Top" : "led_btn",
+ "VerilogStd" : "sysv",
+ "VhdlStd" : "vhdl_93"
+}
