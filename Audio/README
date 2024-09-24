@@ -1,3 +1,13 @@
 Here is where audio projects will go.
 
 I plan to emulate GBA audio for various titles like Kirby Nightmare in Dreamland
+
+In order to do so I will need to master the I2S communication protocol.
+Here are the pins associated with the DAC and Audio PA for the TangNano 20K:
+
+Pin 51 -> PA_SDb/EN
+Pin 56 -> I2S_BCLK
+Pin 55 -> I2S_LRCK
+Pin 54 -> I2S_DIN
+
+Figure out how to interface to the speaker with the above physical constraints
