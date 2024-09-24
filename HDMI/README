@@ -1,1 +1,17 @@
 HDMI projects
+
+
+Physical constraints
+
+DVI_TX2_P    -> Pin 39
+DVI_TX2_N    -> Pin 40
+DVI_TX1_P    -> Pin 37
+DVI_TX1_N    -> Pin 38
+DVI_TX0_P    -> Pin 35
+DVI_TX0_N    -> Pin 36
+DVI_TXC_P    -> Pin 33
+DVI_TXC_N    -> Pin 34
+
+DVI_CEC      -> Pin 25
+DVI_EDID_CLK -> Pin 53
+DVI_EDID_DAT -> Pin 52
