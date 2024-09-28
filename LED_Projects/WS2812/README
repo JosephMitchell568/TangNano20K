@@ -1,0 +1,4 @@
+Projects related to the WS2812 RGB LED protocol.
+
+I am starting with the example provided at 'https://github.com/sipeed/TangNano-20K-example/blob/main/ws2812/src/ws2812.v#L100'
+My goal for this project is to understand exactly how this protocol works so I can add my own created twist to it.
