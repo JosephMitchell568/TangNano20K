@@ -1,0 +1,13 @@
+-d C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\ws2812\impl\gwsynthesis\ws2812.vg
+-p GW2AR-18C-QFN88-8
+-pn GW2AR-LV18QN88C8/I7
+-cst C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\ws2812\src\ws2812.cst
+-cfg C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\ws2812\impl\pnr\device.cfg
+-bit
+-tr
+-ph
+-timing
+-cst_error
+-correct_hold 1
+-route_maxfan 23
+-global_freq 100.000
