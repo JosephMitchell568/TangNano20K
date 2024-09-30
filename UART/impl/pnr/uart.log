@@ -1,0 +1,30 @@
+Reading netlist file: "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\impl\gwsynthesis\uart.vg"
+Parsing netlist file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\impl\gwsynthesis\uart.vg" completed
+Processing netlist completed
+Reading constraint file: "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\src\top.cst"
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clk_d' by the specified constraint. And then it may lead to the excessive delay or skew
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\impl\pnr\uart.power.html" completed
+Generate file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\impl\pnr\uart.pin.html" completed
+Generate file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\impl\pnr\uart.rpt.html" completed
+Generate file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\impl\pnr\uart.rpt.txt" completed
+Generate file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\uart\impl\pnr\uart.tr.html" completed
+Sun Sep 29 22:29:47 2024
+

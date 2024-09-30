@@ -1,0 +1,28 @@
+[
+ {
+  "InstFile" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/uart/src/uart_top.v",
+  "InstLine" : 1,
+  "InstName" : "uart_test",
+  "ModuleFile" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/uart/src/uart_top.v",
+  "ModuleLine" : 1,
+  "ModuleName" : "uart_test",
+  "SubInsts" : [
+   {
+    "InstFile" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/uart/src/uart_top.v",
+    "InstLine" : 114,
+    "InstName" : "uart_rx_inst",
+    "ModuleFile" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/uart/src/uart_rx.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "uart_rx"
+   },
+   {
+    "InstFile" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/uart/src/uart_top.v",
+    "InstLine" : 128,
+    "InstName" : "uart_tx_inst",
+    "ModuleFile" : "C:/Gowin/Gowin_V1.9.9.03_Education_x64/IDE/bin/Documents/uart/src/uart_tx.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "uart_tx"
+   }
+  ]
+ }
+]
