@@ -1,0 +1,7 @@
+This directory holds all current and future UART debugging projects.
+
+The first one that comes directly to mind is using UART for SDIO command/response pair verification/debugging.
+ I need to know that each command I send over SDIO is actually triggering a response from the microSD card inserted.
+
+As of the moment I have the working english example for "Hello Tang Nano 20K" with the 19 bytes + 2 for 0d0a.
+  I will need to know how to send bytes from the response of each SDIO command as well as the command itself!
