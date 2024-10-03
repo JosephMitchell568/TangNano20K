@@ -2,14 +2,13 @@ module microSD(
   input clk,
         rst,
 
+  output wire sdio_cmd,
   output reg sdio_clk,
-             sdio_cmd,
              sdio_d0,
              sdio_d1,
              sdio_d2,
              sdio_d3
  );
-
 
  wire [47:0] sdio_cmd_in;
  reg [5:0] cmd_bit_counter = 48;
@@ -25,7 +24,7 @@ module microSD(
 
  //Initialize all output registers:
  sdio_clk = 1'b1;
- sdio_cmd = 1'b0;
+ sdio_cmd_reg = 1'b0;
  sdio_d0 = 1'b0;
  sdio_d1 = 1'b0;
  sdio_d2 = 1'b0;
@@ -54,13 +53,35 @@ module microSD(
    begin
     if(sdio_clk)
     begin
-     
+     sdio_cmd_reg <= sdio_cmd_in[cmd_bit_counter - 1];
+    end
+    sdio_state <= SEND_CMD_BIT;
+   end
+   SEND_CMD_BIT:
+   begin
+    if(cmd_bit_counter == 1)
+    begin
+     sdio_state <= WAIT_RESPONSE;
+     sdio_cmd_en <= 1'b0; // Disable cmd enable line!
+     cmd_bit_counter <= 48;
+    end
+    else
+    begin
+     sdio_state <= SET_CMD_BIT;
+     cmd_bit_counter <= cmd_bit_counter - 1;
+    end
+    WAIT_RESPONSE:
+    begin
+     if(sdio_cmd == 1'b0) // Start bit from target to host should be 0
+     begin                // I expect sdio_cmd to be 1'bz for some time
+      sdio_state <= 
+     end
     end
    end
   endcase
   sdio_clk <= ~sdio_clk; //toggle sdio_clk each rising edge of clk
  end
 
-
+ assign sdio_cmd = sdio_cmd_en ? sdio_cmd_reg : 1'bz;
  assign sdio_cmd_in = {start_bit,transmission_bit,cmd_index,arg,crc7,end_bit};
 endmodule
