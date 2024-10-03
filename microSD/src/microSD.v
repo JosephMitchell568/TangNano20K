@@ -43,6 +43,8 @@ module microSD(
  parameter SET_CMD_BIT = 0;
  parameter SEND_CMD_BIT = 1;
  parameter WAIT_RESPONSE = 2;
+ parameter READ_CMD_BIT = 3;
+ parametet FINISH = 4;
 
  reg [31:0] sdio_state = SET_CMD_BIT;
 
@@ -74,7 +76,7 @@ module microSD(
     begin
      if(sdio_cmd == 1'b0) // Start bit from target to host should be 0
      begin                // I expect sdio_cmd to be 1'bz for some time
-      sdio_state <= 
+      sdio_state <= READ_CMD_BIT;
      end
     end
    end
