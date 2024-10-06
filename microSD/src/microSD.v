@@ -5,15 +5,21 @@ module microSD(
   
 
   output uart_tx,
+  output sdio_cmd,
 
-  output wire sdio_cmd,
   output reg sdio_clk,
-             sdio_d0,
-             sdio_d1,
-             sdio_d2,
-             sdio_d3
+  output reg sdio_d0,
+  output reg sdio_d1,
+  output reg sdio_d2,
+  output reg sdio_d3
  );
 
+ /*
+ sdio_d0 = 0;
+ sdio_d1 = 0;
+ sdio_d2 = 0;
+ sdio_d3 = 0;
+ */
 
 
  //********************** UART Content ***************************//
@@ -144,13 +150,13 @@ module microSD(
  );
 
 
- reg sdio_cmd_reg = 1;
+ reg sdio_cmd_reg = 1'b0;
 
  wire [47:0] sdio_cmd_in;
  reg [5:0] cmd_bit_counter = 48;
 
  reg start_bit = 1'b0; // From FPGA to microSD card target
- reg transmission_bit = 1'b1; // Direction '0' card -> host '1' host -> card
+ reg transmission_bit = 1'b1; // Direction '0' card -> host '1' host->card
  reg [5:0] cmd_index = 6'b000101; // Start with CMD5
  reg [31:0] arg = {8'b0,24'b0010_0000_0000_0000_0000_0000}; // For CMD5 this is broken up into 8 stuff bits + 24 OCR bits
  reg [6:0] crc7 = 7'b0000000; // Does this matter???
@@ -159,12 +165,9 @@ module microSD(
  reg sdio_cmd_en = 1'b1; // Remember enable line for tristate buffer!
 
  //Initialize all output registers:
- sdio_clk = 1'b1;
- sdio_cmd_reg = 1'b0;
- sdio_d0 = 1'b0;
- sdio_d1 = 1'b0;
- sdio_d2 = 1'b0;
- sdio_d3 = 1'b0;
+
+ //sdio_clk = 1'b1;
+ 
 
  // Design an SDIO FSM to drive the cmd/response system
  // Starting states:
@@ -186,6 +189,10 @@ module microSD(
 
  always@(posedge clk)
  begin
+  sdio_d0 <= 0;
+  sdio_d1 <= 0;
+  sdio_d2 <= 0;
+  sdio_d3 <= 0;
   case(sdio_state)
    SET_CMD_BIT:
    begin
