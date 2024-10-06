@@ -11,3 +11,7 @@ Pin 55 -> I2S_LRCK
 Pin 54 -> I2S_DIN
 
 Figure out how to interface to the speaker with the above physical constraints
+
+An update as of 10/5/2024:
+ The connector type for the pin header is the "JST 1.25mm pitch XH"
+ I was unable to get any confirmation on this other than guess and check work on Amazon...
