@@ -14,14 +14,6 @@ module microSD(
   output reg sdio_d3
  );
 
- /*
- sdio_d0 = 0;
- sdio_d1 = 0;
- sdio_d2 = 0;
- sdio_d3 = 0;
- */
-
-
  //********************** UART Content ***************************//
 
 
@@ -33,8 +25,11 @@ module microSD(
  localparam                       IDLE =  0;
  localparam                       SEND =  1;   //send 
  localparam                       WAIT =  2;   //wait 1 second and send uart received data
+ localparam                       SET_DATA = 3; //change the tx data for next FSM cycle
+ localparam			  WAIT_DATA = 4; //wait for the tx data
  reg[7:0]                         tx_data;
  reg[7:0]                         tx_str;
+ reg[7:0]                         tx_str_data;
  reg                              tx_data_valid;
  wire                             tx_data_ready;
  reg[7:0]                         tx_cnt;
@@ -69,10 +64,10 @@ module microSD(
     end
     SEND:
     begin
-     wait_cnt <= 32'd0;
-     tx_data <= tx_str;
+     wait_cnt <= 32'd0; // Reset wait timer
+     tx_data <= tx_str; // Take the bytecode 'char' of string and store it in the transmissioin data register
 
-     if(tx_data_valid == 1'b1 && tx_data_ready == 1'b1 && tx_cnt < DATA_NUM - 1)//Send 12 bytes data
+     if(tx_data_valid == 1'b1 && tx_data_ready == 1'b1 && tx_cnt < DATA_NUM - 1) // Send transmission byte
      begin
       tx_cnt <= tx_cnt + 8'd1; //Send data counter
      end
@@ -80,7 +75,7 @@ module microSD(
      begin
       tx_cnt <= 8'd0;
       tx_data_valid <= 1'b0;
-      state <= WAIT;
+      state <= WAIT;             // This is the part we want to change...
      end
      else if(~tx_data_valid)
      begin
@@ -88,6 +83,48 @@ module microSD(
      end
     end
     WAIT:
+    begin
+     
+     wait_cnt <= wait_cnt + 32'd1;
+
+     if(rx_data_valid == 1'b1)
+     begin
+      tx_data_valid <= 1'b1;
+      tx_data <= rx_data;   // send uart received data
+     end
+     else if(tx_data_valid && tx_data_ready)
+     begin
+      tx_data_valid <= 1'b0;
+     end
+     else if(wait_cnt >= CLK_FRE * 1000_000) // wait for 1 second
+     begin
+      state <= SET_DATA; // Used to be (SEND) Instead stay in wait state...
+     end // Now go to another state to change the message...
+     
+    end
+
+    SET_DATA:
+    begin
+     wait_cnt <= 32'd0; // Reset wait timer
+     tx_data <= tx_str_data; // Take the bytecode 'char' of string and store it in the transmissioin data register
+
+     if(tx_data_valid == 1'b1 && tx_data_ready == 1'b1 && tx_cnt < DATA_NUM2 - 1) // Send transmission byte
+     begin
+      tx_cnt <= tx_cnt + 8'd1; //Send data counter
+     end
+     else if(tx_data_valid && tx_data_ready)//last byte sent is complete
+     begin
+      tx_cnt <= 8'd0;
+      tx_data_valid <= 1'b0;
+      state <= WAIT_DATA;             // This is the part we want to change...
+     end
+     else if(~tx_data_valid)
+     begin
+      tx_data_valid <= 1'b1;
+     end
+    end
+
+    WAIT_DATA:
     begin
      wait_cnt <= wait_cnt + 32'd1;
 
@@ -101,23 +138,30 @@ module microSD(
       tx_data_valid <= 1'b0;
      end
      else if(wait_cnt >= CLK_FRE * 1000_000) // wait for 1 second
-      state <= SEND;
-     end
-     default:
      begin
-      state <= IDLE;
-     end
+      state <= WAIT_DATA; // Used to be (SEND) Instead stay in wait state...
+     end // Now go to another state to change the message...
+    end
+
+    default:
+    begin
+     state <= IDLE;
+    end
    endcase
  end
 
- parameter 	ENG_NUM  = 9; // Number of characters
- parameter 	CHE_NUM  = 0;// Number of chinese characters
- parameter 	DATA_NUM = CHE_NUM * 3 + ENG_NUM + 2; 
- wire [ DATA_NUM * 8 - 1:0] send_data = {"SDIO Test",16'h0d0a};
+ parameter 	ENG_NUM  = 8; // Number of characters
+ parameter 	DATA_NUM = ENG_NUM + 2; 
+ wire [ DATA_NUM * 8 - 1:0] send_data = {"SDIO CMD",16'h0d0a};
+
+ parameter	DATA_NUM2 = 15;
+ wire [ DATA_NUM2 * 8 - 1:0] send_data2 = {"SDIO CMD DATA",16'h0d0a}; 
+
 
  always@(*)
  begin
   tx_str <= send_data[(DATA_NUM - 1 - tx_cnt) * 8 +: 8];
+  tx_str_data <= send_data2[(DATA_NUM2 - 1 - tx_cnt) * 8 +: 8];
  end
 
 

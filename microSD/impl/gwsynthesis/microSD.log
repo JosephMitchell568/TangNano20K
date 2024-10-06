@@ -1,0 +1,36 @@
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\uart_rx.v'
+Analyzing Verilog file 'C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v'
+Analyzing Verilog file 'C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\uart_tx.v'
+Compiling module 'microSD'("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":1)
+WARN  (EX3780) : Using initial value of 'start_bit' since it is never assigned("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":202)
+WARN  (EX3780) : Using initial value of 'transmission_bit' since it is never assigned("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":203)
+WARN  (EX3780) : Using initial value of 'cmd_index' since it is never assigned("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":204)
+WARN  (EX3780) : Using initial value of 'arg' since it is never assigned("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":205)
+WARN  (EX3780) : Using initial value of 'crc7' since it is never assigned("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":206)
+WARN  (EX3780) : Using initial value of 'end_bit' since it is never assigned("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":207)
+Compiling module 'uart_rx(CLK_FRE=27)'("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\uart_rx.v":1)
+Compiling module 'uart_tx(CLK_FRE=27)'("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\uart_tx.v":1)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 6("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":260)
+WARN  (EX3791) : Expression size 32 truncated to fit in target size 6("C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\src\microSD.v":268)
+NOTE  (EX0101) : Current top module is "microSD"
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+[95%] Generate netlist file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\impl\gwsynthesis\microSD.vg" completed
+[100%] Generate report file "C:\Gowin\Gowin_V1.9.9.03_Education_x64\IDE\bin\Documents\microSD\impl\gwsynthesis\microSD_syn.rpt.html" completed
+GowinSynthesis finish
