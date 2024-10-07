@@ -40,7 +40,7 @@ module microSD(
  reg[3:0]                         state;
 
 
-
+ reg [7:0] cmd_bit_counter_uart = 8'd49; //Decimal 49 
 
  wire rst_n = !rst;
 
@@ -65,7 +65,21 @@ module microSD(
     SEND:
     begin
      wait_cnt <= 32'd0; // Reset wait timer
-     tx_data <= tx_str; // Take the bytecode 'char' of string and store it in the transmissioin data register
+     if(tx_cnt <= 47)
+     begin
+      tx_data <= sdio_cmd_in[47 - tx_cnt] + 8'd48; // Take the bytecode 'char' of string and store it in the transmissioin data register
+     end
+     else
+     begin
+      if(tx_cnt == 48)
+      begin
+       tx_data <= 16'h0d;
+      end
+      else
+      begin
+       tx_data <= 16'h0a;
+      end
+     end
 
      if(tx_data_valid == 1'b1 && tx_data_ready == 1'b1 && tx_cnt < DATA_NUM - 1) // Send transmission byte
      begin
@@ -82,9 +96,9 @@ module microSD(
       tx_data_valid <= 1'b1;
      end
     end
+
     WAIT:
     begin
-     
      wait_cnt <= wait_cnt + 32'd1;
 
      if(rx_data_valid == 1'b1)
@@ -98,15 +112,31 @@ module microSD(
      end
      else if(wait_cnt >= CLK_FRE * 1000_000) // wait for 1 second
      begin
-      state <= SET_DATA; // Used to be (SEND) Instead stay in wait state...
+      state <= WAIT; // Used to be (SEND) Instead stay in wait state...
      end // Now go to another state to change the message...
      
     end
-
+/*
     SET_DATA:
     begin
      wait_cnt <= 32'd0; // Reset wait timer
-     tx_data <= tx_str_data; // Take the bytecode 'char' of string and store it in the transmissioin data register
+     if(cmd_bit_counter_uart >= 2)
+     begin
+      tx_data <= {7{sdio_cmd_in[cmd_bit_counter_uart - 2]}} + 8'd48; // Take the bytecode 'char' of string and store it in the transmissioin data register
+     end
+     else if(cmd_bit_counter_uart == 1)
+     begin
+      tx_data <= 16'h0d; 
+     end
+     else
+     begin
+      tx_data <= 16'h0a;
+     end
+
+     if(cmd_bit_counter_uart != 0)
+     begin
+      cmd_bit_counter_uart <= cmd_bit_counter_uart - 8'd1;
+     end
 
      if(tx_data_valid == 1'b1 && tx_data_ready == 1'b1 && tx_cnt < DATA_NUM2 - 1) // Send transmission byte
      begin
@@ -116,6 +146,7 @@ module microSD(
      begin
       tx_cnt <= 8'd0;
       tx_data_valid <= 1'b0;
+      cmd_bit_counter_uart <= 8'd49;
       state <= WAIT_DATA;             // This is the part we want to change...
      end
      else if(~tx_data_valid)
@@ -142,7 +173,7 @@ module microSD(
       state <= WAIT_DATA; // Used to be (SEND) Instead stay in wait state...
      end // Now go to another state to change the message...
     end
-
+*/
     default:
     begin
      state <= IDLE;
@@ -150,18 +181,23 @@ module microSD(
    endcase
  end
 
- parameter 	ENG_NUM  = 8; // Number of characters
- parameter 	DATA_NUM = ENG_NUM + 2; 
- wire [ DATA_NUM * 8 - 1:0] send_data = {"SDIO CMD",16'h0d0a};
+ //parameter 	ENG_NUM  = 8; // Number of characters
+  
+ //wire [ DATA_NUM * 8 - 1:0] send_data = {"SDIO CMD",16'h0d0a};
 
- parameter	DATA_NUM2 = 15;
- wire [ DATA_NUM2 * 8 - 1:0] send_data2 = {"SDIO CMD DATA",16'h0d0a}; 
+ //parameter	DATA_NUM2 = 50;
+ //wire [ DATA_NUM2 * 8 - 1:0] send_data2 = {"SDIO CMD DATA",16'h0d0a}; 
 
+ //parameter 	DATA_NUM = 10 + 2; // 10 for the 10 bits as ASCII and 2 for the carrage return and null char
+ //wire [9:0] test_data = 10'b00101_01100; // Test data works... Yay!
+
+ //Now instead of test_data use real data!
+ parameter	DATA_NUM = 48 + 2; // 48 bits for SDIO CMD + 2 for carrige return and null char
 
  always@(*)
  begin
-  tx_str <= send_data[(DATA_NUM - 1 - tx_cnt) * 8 +: 8];
-  tx_str_data <= send_data2[(DATA_NUM2 - 1 - tx_cnt) * 8 +: 8];
+  //tx_str <= send_data[(DATA_NUM - 1 - tx_cnt) * 8 +: 8];
+  //tx_str_data <= send_data2[(DATA_NUM2 - 1 - tx_cnt) * 8 +: 8];
  end
 
 
