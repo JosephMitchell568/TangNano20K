@@ -2,3 +2,12 @@ This project will be built off of an existing project from WangXuan95.
 It contains an SD card reader/writer example description I intend to fully comment and modify for future projects.
 
 Once I can interface with external storage from the microSD card I can begin to work with colored images and videos!
+
+10/7/2024:
+ With careful research I have realized that my understanding of SDIO is incorrect.
+ No microSD cards available or manufactured support SDIO communication protocol!
+  They support 2 types of protocol:
+  1) SD
+  2) SPI
+ The provided example uses SPI mode, I will cover this one first since it is readily available and working.
+ After I have fully understood SPI communication I will transfer over to SD communication.
