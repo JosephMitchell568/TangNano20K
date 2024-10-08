@@ -1,0 +1,3 @@
+Using the NESTANG sd card access example I will try to write and read a block of data to the microSD card.
+
+I will use UART to debug the design.
