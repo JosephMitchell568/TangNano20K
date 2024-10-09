@@ -16,6 +16,15 @@
 //  Read that same block from the microSD card,
 //  and send read block to UART
 //  Verify that both data are the same!
+// Something important to note:
+//  The response to your command is only determined when the 
+//   cyclical redundancy check of 7 bits matches the SD command!
+// For CMD0 the response should be in R1 format described below:
+//  {start,transmission,cmdIndex,cardStat,CRC7,end}
+//    0        0           6'bx     32'bx  crc7 1
+// Keep reading responses untill CRC7 matches.
+//  Timeout at 200ms...
+
 
 module sdcmd_ctrl (
  input  wire         rstn,
