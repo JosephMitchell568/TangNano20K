@@ -24,7 +24,9 @@
 //    0        0           6'bx     32'bx  crc7 1
 // Keep reading responses untill CRC7 matches.
 //  Timeout at 200ms...
-
+// Another thing to try is SD 4 bit data transfer mode:
+//  CMD0 -> CMD1 -> ACMD6 w/arg(2) -> Write block cmds...
+//           ^ notifies if 4 bit bus width supported
 
 module sdcmd_ctrl (
  input  wire         rstn,
