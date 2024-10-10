@@ -234,6 +234,7 @@ module microSD(
 
  wire [47:0] sdio_cmd_in;
  reg [5:0] cmd_bit_counter = 48;
+ reg [5:0] response_bit_counter = 48;
 
  reg start_bit = 1'b0; // From FPGA to microSD card target
  reg transmission_bit = 1'b1; // Direction '0' card -> host '1' host->card
@@ -261,8 +262,8 @@ module microSD(
 
  parameter SET_CMD_BIT = 0;
  parameter SEND_CMD_BIT = 1;
- parameter WAIT_RESPONSE = 2;
- parameter READ_CMD_BIT = 3;
+ parameter LOAD_RESPONSE_BIT = 2;
+ parameter READ_RESPONSE_BIT = 3;
  parameter FINISH = 4;
 
  reg [31:0] sdio_state = SET_CMD_BIT;
@@ -274,6 +275,7 @@ module microSD(
   sdio_d2 <= 0;
   sdio_d3 <= 0;
   case(sdio_state)
+
    SET_CMD_BIT:
    begin
     if(sdio_clk)
@@ -282,36 +284,42 @@ module microSD(
     end
     sdio_state <= SEND_CMD_BIT;
    end
+
    SEND_CMD_BIT:
    begin
     if(cmd_bit_counter == 1)
     begin
-     sdio_state <= WAIT_RESPONSE;
+     sdio_state <= LOAD_RESPONSE_BIT;
      sdio_cmd_en <= 1'b0; // Disable cmd enable line!
-     cmd_bit_counter <= 48;
+     cmd_bit_counter <= 48; // Reset command bit counter
     end
     else
     begin
-     sdio_state <= SET_CMD_BIT;
+     sdio_state <= SET_CMD_BIT; // Transition to set next cmd bit state
      cmd_bit_counter <= cmd_bit_counter - 1;
     end
    end
-   WAIT_RESPONSE:
+
+   LOAD_RESPONSE_BIT:
    begin
-    if(sdio_cmd == 1'b0) // Start bit from target to host should be 0
-    begin                // I expect sdio_cmd to be 1'bz for some time
-     sdio_state <= READ_CMD_BIT;
-     cmd_bit_counter <= cmd_bit_counter - 1;
-     if(cmd_bit_counter == 1)
-     begin
-      sdio_state <= FINISH;
-     end
+    sdio_state <= READ_RESPONSE_BIT;
+    response_bit_counter <= response_bit_counter - 1;
+    if(response_bit_counter == 1)
+    begin
+     sdio_state <= FINISH; // Check cyclical redundancy checksum here!
     end
    end
+
+   READ_RESPONSE_BIT:
+   begin
+
+   end
+
    FINISH:
    begin
     sdio_state <= FINISH;
    end
+
   endcase
   sdio_clk <= ~sdio_clk; //toggle sdio_clk each rising edge of clk
  end
