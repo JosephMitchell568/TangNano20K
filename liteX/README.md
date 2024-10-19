@@ -1,0 +1,3 @@
+LiteX TangNano20K example file
+
+Add the litesdcard example to this...
