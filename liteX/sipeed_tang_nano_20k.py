@@ -26,6 +26,12 @@ from litedram.phy import GENSDRPHY
 
 from litex_boards.platforms import sipeed_tang_nano_20k
 
+# litesdcard -------------------------------
+
+
+
+
+
 # CRG ----------------------------------------------------------------------------------------------
 
 class _CRG(LiteXModule):
