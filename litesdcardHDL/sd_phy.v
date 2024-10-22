@@ -830,71 +830,87 @@ module sd_phy (
       dostate <= ST_IDLE;
      end
     end
-/// Paused for break here... 
-    ST_DATA_TOKEN: begin
-       if (mode_spi_s) begin
-          // SPI mode: wait for mgr to accept the block, then align with spi_cnt.
-          // Top 3 bits are "don't care", so align with bit 4.
-          if (~do_crc_token & spi_cnt[2:0] == 3'd2) begin
-             dostate <= ST_DATA_TOKEN_1;
-          end
+ 
+    ST_DATA_TOKEN: 
+    begin
+     if (mode_spi_s) 
+     begin
+      // SPI mode: wait for mgr to accept the block, then align with spi_cnt.
+      // Top 3 bits are "don't care", so align with bit 4.
+      if (~do_crc_token & spi_cnt[2:0] == 3'd2) 
+      begin
+       dostate <= ST_DATA_TOKEN_1;
+      end
+     end
+     else 
+     begin
+      // SD mode: send CRC token
+      case(dodc)
+       1: 
+       begin
+        sd_dat_oe[0] <= 1;
+        sd_dat_out[0] <= 0; // start bit
        end
-       else begin
-          // SD mode: send CRC token
-          case(dodc)
-          1: begin
-             sd_dat_oe[0] <= 1;
-             sd_dat_out[0] <= 0; // start bit
-          end
-          2: sd_dat_out[0] <= ~data_in_crc_good;
-          3: sd_dat_out[0] <= data_in_crc_good;
-          4: sd_dat_out[0] <= ~data_in_crc_good;
-          5: sd_dat_out[0] <= 1; // stop/end bit
-          6: begin
-             sd_dat_out[0] <= 0; // start bit of busy
-             dostate <= ST_DATA_TOKEN_1;
-          end
-          endcase
+       2: sd_dat_out[0] <= ~data_in_crc_good;
+       3: sd_dat_out[0] <= data_in_crc_good;
+       4: sd_dat_out[0] <= ~data_in_crc_good;
+       5: sd_dat_out[0] <= 1; // stop/end bit
+       6: 
+       begin
+        sd_dat_out[0] <= 0; // start bit of busy
+        dostate <= ST_DATA_TOKEN_1;
        end
+      endcase
+     end
     end
-    ST_DATA_TOKEN_1: begin
-       if (mode_spi_s) begin
-          // SPI mode: send one-byte response token
-          sd_dat_oe[0] <= 1;
-          case(spi_cnt[2:0])
-          3: sd_dat_out[0] <= 0;
-          4: sd_dat_out[0] <= ~data_in_crc_good;
-          5: sd_dat_out[0] <= data_in_crc_good;
-          6: sd_dat_out[0] <= ~data_in_crc_good;
-          7: begin
-             sd_dat_out[0] <= 1;
-             dostate <= ST_DATA_TOKEN_2;
-          end
-          endcase
+
+    ST_DATA_TOKEN_1: 
+    begin
+     if (mode_spi_s) 
+     begin
+      // SPI mode: send one-byte response token
+      sd_dat_oe[0] <= 1;
+      case(spi_cnt[2:0])
+       3: sd_dat_out[0] <= 0;
+       4: sd_dat_out[0] <= ~data_in_crc_good;
+       5: sd_dat_out[0] <= data_in_crc_good;
+       6: sd_dat_out[0] <= ~data_in_crc_good;
+       7: 
+       begin
+        sd_dat_out[0] <= 1;
+        dostate <= ST_DATA_TOKEN_2;
        end
-       else begin
-          // SD mode: busy signal until data sink deasserts ACT
-          sd_dat_oe[0] <= 1;
-          sd_dat_out[0] <= 0;
-          if(~data_in_act_s) begin
-             // drive stop bit high
-             sd_dat_oe[0] <= 1;
-             sd_dat_out[0] <= 1;
-             dostate <= ST_DATA_TOKEN_2;
-          end
-       end
+      endcase
+     end
+     else 
+     begin
+      // SD mode: busy signal until data sink deasserts ACT
+      sd_dat_oe[0] <= 1;
+      sd_dat_out[0] <= 0;
+      if(~data_in_act_s) 
+      begin
+       // drive stop bit high
+       sd_dat_oe[0] <= 1;
+       sd_dat_out[0] <= 1;
+       dostate <= ST_DATA_TOKEN_2;
+      end
+     end
     end
-    ST_DATA_TOKEN_2: begin
-       sd_dat_oe[0] <= 0;
-       dostate <= ST_IDLE;
+
+    ST_DATA_TOKEN_2: 
+    begin
+     sd_dat_oe[0] <= 0;
+     dostate <= ST_IDLE;
     end
+
     default: dostate <= ST_RESET;
+
    endcase
  
    // for snooping real cards
    // sd_dat_oe <= 4'b0;
    // sd_cmd_oe <= 1'b0;
-    end
+  end
  end
 
 
